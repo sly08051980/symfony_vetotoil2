@@ -23,12 +23,7 @@ class Soigner
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_soins = null;
 
-    #[ORM\ManyToOne(inversedBy: 'soigners')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Animal $animal = null;
-
-    #[ORM\ManyToOne(inversedBy: 'soigners')]
-    #[ORM\JoinColumn(nullable: false)]
+   
     private ?Patient $patient = null;
 
     public function getId(): ?int
@@ -68,30 +63,6 @@ class Soigner
     public function setDateSoins(?\DateTimeInterface $date_soins): static
     {
         $this->date_soins = $date_soins;
-
-        return $this;
-    }
-
-    public function getAnimal(): ?Animal
-    {
-        return $this->animal;
-    }
-
-    public function setAnimal(?Animal $animal): static
-    {
-        $this->animal = $animal;
-
-        return $this;
-    }
-
-    public function getPatient(): ?Patient
-    {
-        return $this->patient;
-    }
-
-    public function setPatient(?Patient $patient): static
-    {
-        $this->patient = $patient;
 
         return $this;
     }

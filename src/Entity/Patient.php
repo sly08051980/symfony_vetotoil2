@@ -251,33 +251,4 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Soigner>
-     */
-    public function getSoigners(): Collection
-    {
-        return $this->soigners;
-    }
-
-    public function addSoigner(Soigner $soigner): static
-    {
-        if (!$this->soigners->contains($soigner)) {
-            $this->soigners->add($soigner);
-            $soigner->setPatient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSoigner(Soigner $soigner): static
-    {
-        if ($this->soigners->removeElement($soigner)) {
-            // set the owning side to null (unless already changed)
-            if ($soigner->getPatient() === $this) {
-                $soigner->setPatient(null);
-            }
-        }
-
-        return $this;
-    }
 }
