@@ -60,8 +60,7 @@ class Patient implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_fin = null;
 
-    #[ORM\OneToMany(targetEntity: Soigner::class, mappedBy: 'patient')]
-    private Collection $soigners;
+  
 
     public function __construct()
     {

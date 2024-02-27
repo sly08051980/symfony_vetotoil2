@@ -28,15 +28,7 @@ class Animal
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_fin_animal = null;
 
-    #[ORM\Column(length: 255)]
- 
-
-    #[ORM\ManyToOne(inversedBy: 'animals')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Race $race = null;
-
-    #[ORM\OneToMany(targetEntity: Soigner::class, mappedBy: 'animal')]
-    private Collection $soigners;
+  
 
     public function __construct()
     {
@@ -92,50 +84,6 @@ class Animal
     public function setDateFinAnimal(?\DateTimeInterface $date_fin_animal): static
     {
         $this->date_fin_animal = $date_fin_animal;
-
-        return $this;
-    }
-
-  
-
-    public function getRace(): ?Race
-    {
-        return $this->race;
-    }
-
-    public function setRace(?Race $race): static
-    {
-        $this->race = $race;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Soigner>
-     */
-    public function getSoigners(): Collection
-    {
-        return $this->soigners;
-    }
-
-    public function addSoigner(Soigner $soigner): static
-    {
-        if (!$this->soigners->contains($soigner)) {
-            $this->soigners->add($soigner);
-            $soigner->setAnimal($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSoigner(Soigner $soigner): static
-    {
-        if ($this->soigners->removeElement($soigner)) {
-            // set the owning side to null (unless already changed)
-            if ($soigner->getAnimal() === $this) {
-                $soigner->setAnimal(null);
-            }
-        }
 
         return $this;
     }

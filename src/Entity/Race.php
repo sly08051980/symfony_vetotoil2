@@ -18,12 +18,6 @@ class Race
     #[ORM\Column(length: 30)]
     private ?string $race_animal = null;
 
-    #[ORM\ManyToOne(inversedBy: 'races')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Type $type = null;
-
-    #[ORM\OneToMany(targetEntity: Animal::class, mappedBy: 'race')]
-    private Collection $animals;
 
     public function __construct()
     {
@@ -47,45 +41,5 @@ class Race
         return $this;
     }
 
-    public function getType(): ?Type
-    {
-        return $this->type;
-    }
-
-    public function setType(?Type $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Animal>
-     */
-    public function getAnimals(): Collection
-    {
-        return $this->animals;
-    }
-
-    public function addAnimal(Animal $animal): static
-    {
-        if (!$this->animals->contains($animal)) {
-            $this->animals->add($animal);
-            $animal->setRace($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAnimal(Animal $animal): static
-    {
-        if ($this->animals->removeElement($animal)) {
-            // set the owning side to null (unless already changed)
-            if ($animal->getRace() === $this) {
-                $animal->setRace(null);
-            }
-        }
-
-        return $this;
-    }
+    
 }

@@ -18,8 +18,7 @@ class Type
     #[ORM\Column(length: 50)]
     private ?string $type_animal = null;
 
-    #[ORM\OneToMany(targetEntity: Race::class, mappedBy: 'type')]
-    private Collection $races;
+ 
 
     public function __construct()
     {
@@ -43,33 +42,5 @@ class Type
         return $this;
     }
 
-    /**
-     * @return Collection<int, Race>
-     */
-    public function getRaces(): Collection
-    {
-        return $this->races;
-    }
-
-    public function addRace(Race $race): static
-    {
-        if (!$this->races->contains($race)) {
-            $this->races->add($race);
-            $race->setType($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRace(Race $race): static
-    {
-        if ($this->races->removeElement($race)) {
-            // set the owning side to null (unless already changed)
-            if ($race->getType() === $this) {
-                $race->setType(null);
-            }
-        }
-
-        return $this;
-    }
+   
 }
