@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AjouterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,20 @@ class Ajouter
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $fin_repas = null;
+
+    #[ORM\OneToMany(targetEntity: Societe::class, mappedBy: 'ajouter')]
+    private Collection $societes;
+
+    #[ORM\ManyToOne(inversedBy: 'ajouters')]
+    private ?Societe $siret = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ajouters')]
+    private ?Employer $employer = null;
+
+    public function __construct()
+    {
+        $this->societes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,6 +151,60 @@ class Ajouter
     public function setFinRepas(?\DateTimeInterface $fin_repas): static
     {
         $this->fin_repas = $fin_repas;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Societe>
+     */
+    public function getSocietes(): Collection
+    {
+        return $this->societes;
+    }
+
+    public function addSociete(Societe $societe): static
+    {
+        if (!$this->societes->contains($societe)) {
+            $this->societes->add($societe);
+            $societe->setAjouter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSociete(Societe $societe): static
+    {
+        if ($this->societes->removeElement($societe)) {
+            // set the owning side to null (unless already changed)
+            if ($societe->getAjouter() === $this) {
+                $societe->setAjouter(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSiret(): ?Societe
+    {
+        return $this->siret;
+    }
+
+    public function setSiret(?Societe $siret): static
+    {
+        $this->siret = $siret;
+
+        return $this;
+    }
+
+    public function getEmployer(): ?Employer
+    {
+        return $this->employer;
+    }
+
+    public function setEmployer(?Employer $employer): static
+    {
+        $this->employer = $employer;
 
         return $this;
     }

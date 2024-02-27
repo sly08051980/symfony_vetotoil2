@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SocieteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -78,6 +80,17 @@ class Societe implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 10)]
     private ?string $droit_utilisateur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'societes')]
+    private ?Ajouter $ajouter = null;
+
+    #[ORM\OneToMany(targetEntity: Ajouter::class, mappedBy: 'siret')]
+    private Collection $ajouters;
+
+    public function __construct()
+    {
+        $this->ajouters = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -342,6 +355,48 @@ class Societe implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDroitUtilisateur(string $droit_utilisateur): static
     {
         $this->droit_utilisateur = $droit_utilisateur;
+
+        return $this;
+    }
+
+    public function getAjouter(): ?Ajouter
+    {
+        return $this->ajouter;
+    }
+
+    public function setAjouter(?Ajouter $ajouter): static
+    {
+        $this->ajouter = $ajouter;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ajouter>
+     */
+    public function getAjouters(): Collection
+    {
+        return $this->ajouters;
+    }
+
+    public function addAjouter(Ajouter $ajouter): static
+    {
+        if (!$this->ajouters->contains($ajouter)) {
+            $this->ajouters->add($ajouter);
+            $ajouter->setSiret($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAjouter(Ajouter $ajouter): static
+    {
+        if ($this->ajouters->removeElement($ajouter)) {
+            // set the owning side to null (unless already changed)
+            if ($ajouter->getSiret() === $this) {
+                $ajouter->setSiret(null);
+            }
+        }
 
         return $this;
     }

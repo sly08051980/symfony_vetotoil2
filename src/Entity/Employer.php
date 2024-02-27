@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EmployerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -63,6 +65,14 @@ class Employer implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 10)]
     private ?string $droit_utilisateur_employer = null;
+
+    #[ORM\OneToMany(targetEntity: Ajouter::class, mappedBy: 'employer')]
+    private Collection $ajouters;
+
+    public function __construct()
+    {
+        $this->ajouters = new ArrayCollection();
+    }
 
     public function getId(): ?string
     {
@@ -274,6 +284,36 @@ class Employer implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDroitUtilisateurEmployer(string $droit_utilisateur_employer): static
     {
         $this->droit_utilisateur_employer = $droit_utilisateur_employer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ajouter>
+     */
+    public function getAjouters(): Collection
+    {
+        return $this->ajouters;
+    }
+
+    public function addAjouter(Ajouter $ajouter): static
+    {
+        if (!$this->ajouters->contains($ajouter)) {
+            $this->ajouters->add($ajouter);
+            $ajouter->setEmployer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAjouter(Ajouter $ajouter): static
+    {
+        if ($this->ajouters->removeElement($ajouter)) {
+            // set the owning side to null (unless already changed)
+            if ($ajouter->getEmployer() === $this) {
+                $ajouter->setEmployer(null);
+            }
+        }
 
         return $this;
     }
