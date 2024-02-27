@@ -50,7 +50,7 @@ class Employer implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $telephone_employer = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $email = null;
+    private ?string $email_employer = null;
 
     #[ORM\Column(length: 20)]
     private ?string $profession = null;
@@ -218,14 +218,14 @@ class Employer implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmailEmployer(): ?string
     {
-        return $this->email;
+        return $this->email_employer;
     }
 
-    public function setEmail(string $email): static
+    public function setEmailEmployer(string $email_employer): static
     {
-        $this->email = $email;
+        $this->email_employer = $email_employer;
 
         return $this;
     }
